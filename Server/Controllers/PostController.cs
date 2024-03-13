@@ -26,7 +26,7 @@ namespace Server.Controllers
         /// <param name="tags"></param>
         /// <param name="sortBy"></param>
         /// <param name="direction"></param>
-        /// <returns></returns>
+        /// <returns>List of Posts based on parameters</returns>
         [HttpGet]
         [MapToApiVersion("1.0")]
         [ProducesResponseType(typeof(List<PostDto>), StatusCodes.Status200OK)]
@@ -34,12 +34,16 @@ namespace Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<PostDto>>> GetPosts(
-            [Required]
-            [FromQuery] string tags,
+            [Required] [FromQuery] string tags,
             [FromQuery] string sortBy = "Id",
             [FromQuery] string direction = "asc"
             )
         {
+            if (string.IsNullOrEmpty(tags))
+            {
+                throw new ArgumentException("Tags parameter is required");
+            }
+
             try
             {
                 _logger.LogInfo("Post Controller Called");

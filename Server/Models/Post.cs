@@ -1,6 +1,9 @@
 ﻿using System;
 namespace Server.Models
 {
+    /// <summary>
+    /// data type for retrieving data from database(json data)
+    /// </summary>
 	public class Post
 	{
         public int Id { get; set; }

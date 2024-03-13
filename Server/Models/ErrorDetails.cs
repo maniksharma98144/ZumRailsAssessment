@@ -2,6 +2,9 @@ using System.Text.Json;
 
 namespace Server.Models
 {
+    /// <summary>
+    /// Custom Error handler type
+    /// </summary>
     public class ErrorDetails
     {
         public int StatusCode { get; set; }

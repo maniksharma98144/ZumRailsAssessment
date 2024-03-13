@@ -7,30 +7,47 @@ namespace Server.Services
     public class PostService : IPostService
     {
         public readonly IPostRepository _postRepository;
+        private readonly IEqualityComparer<Post> _postEqualityComparer;
 
-        public PostService(IPostRepository postRepository)
+        public PostService(IPostRepository postRepository, IEqualityComparer<Post> postEqualityComparer)
         {
             _postRepository = postRepository;
+            _postEqualityComparer = postEqualityComparer;
         }
 
+        /// <summary>
+        /// helper method to get posts
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Post>> GetPosts(string[] tags, string sortBy, string direction)
         {
             List<Post> posts = new();
 
-            IEnumerable<string> distinctTags = tags.Distinct();
+            IEnumerable<string> uniqueTags = tags.Distinct();
 
-            foreach (string tag in distinctTags)
+            foreach (string tag in uniqueTags)
             {
                 posts.AddRange(await _postRepository.GetPostsAsync(tag));
             }
 
-            var distinctPosts = posts.Distinct();
+            var uniquePosts = posts.Distinct(_postEqualityComparer);
 
-            var sortedPosts = SortPosts(distinctPosts, sortBy, direction);
+            var sortedPosts = SortPosts(uniquePosts, sortBy, direction);
 
             return sortedPosts;
         }
 
+        /// <summary>
+        /// helper method to sort posts based on sortby and direction
+        /// </summary>
+        /// <param name="posts"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         private static List<Post> SortPosts(IEnumerable<Post> posts, string sortBy, string direction)
         {
             if (posts == null || !posts.Any())
@@ -46,6 +63,12 @@ namespace Server.Services
             };
         }
 
+        /// <summary>
+        /// helper methdo to generate expressions for sorting
+        /// </summary>
+        /// <param name="sortBy"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         private static Expression<Func<Post, object>> GetExpression(string? sortBy)
         {
             Expression<Func<Post, object>> expression = sortBy?.ToLower() switch

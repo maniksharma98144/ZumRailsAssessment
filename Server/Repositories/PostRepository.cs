@@ -25,20 +25,30 @@ namespace Server.Repositories
             _cache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         }
 
+        /// <summary>
+        /// custom method for generating Url based on criteria
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns>modified url</returns>
         private string CreateTaggedUrl(string tag) => $"{_apiBaseUrl}?tag={Uri.EscapeDataString(tag)}";
 
+        /// <summary>
+        /// helper method to get data using httpClient
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Post>> GetPostsAsync(string tag)
         {
             try
             {
+                //semaphore to avoid resource starvation
                 await semaphore.WaitAsync();
 
+                //checking and getting data from cache if available
                 if (_cache.TryGetValue(tag, out PostResponse? posts))
                 {
-                    Console.WriteLine("in memory");
                     return posts.Posts;
                 }
-                Console.WriteLine("out memory");
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromSeconds(60))
@@ -57,7 +67,6 @@ namespace Server.Repositories
                 _cache.Set(tag, data, cacheOptions);
                 return data.Posts;
             }
-
             finally
             {
                 semaphore.Release();

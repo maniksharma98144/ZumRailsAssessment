@@ -2,6 +2,7 @@
 using NLog;
 using Server;
 using Server.Mapper;
+using Server.Models;
 using Server.Repositories;
 using Server.Services;
 
@@ -20,7 +21,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureCors(corsStr);
 builder.Services.ConfigureVersioning();
 builder.Services.AddHttpClient();
-
+builder.Services.AddSingleton<IEqualityComparer<Post>, PostEqualityComparer>();
 builder.Services.AddScoped<IPostService, PostService>();
 builder.Services.AddScoped<IPostRepository>(serviceProvider =>
 {

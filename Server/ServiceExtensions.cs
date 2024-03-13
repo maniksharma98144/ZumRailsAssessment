@@ -7,8 +7,16 @@ using Server.Models;
 
 namespace Server
 {
+    /// <summary>
+    /// service extension for Program.cs
+    /// </summary>
     public static class ServiceExtensions
     {
+        /// <summary>
+        /// extension method for configuring cors
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="corsStr"></param>
         public static void ConfigureCors(this IServiceCollection services, string corsStr)
         {
             services.AddCors(options =>
@@ -20,6 +28,10 @@ namespace Server
             });
         }
 
+        /// <summary>
+        /// extension method for configuring api versions
+        /// </summary>
+        /// <param name="services"></param>
         public static void ConfigureVersioning(this IServiceCollection services)
         {
             services.AddApiVersioning(options =>

@@ -2,6 +2,9 @@ using NLog;
 
 namespace Server.Services
 {
+    /// <summary>
+    /// logger service for generating custom log
+    /// </summary>
     public class LoggerService : ILoggerService
     {
         private static readonly NLog.ILogger logger = LogManager.GetCurrentClassLogger();

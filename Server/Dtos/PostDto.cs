@@ -1,6 +1,9 @@
 ﻿using System;
 namespace Server.Dtos
 {
+    /// <summary>
+    /// PostDto for returning the data type of posts to the client
+    /// </summary>
     public class PostDto
     {
         public int Id { get; set; }
