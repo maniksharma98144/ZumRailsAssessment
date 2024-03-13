@@ -40,28 +40,6 @@ namespace Server.Services
             return sortedPosts;
         }
 
-        /// <summary>
-        /// helper method to sort posts based on sortby and direction
-        /// </summary>
-        /// <param name="posts"></param>
-        /// <param name="sortBy"></param>
-        /// <param name="direction"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        private static List<Post> SortPosts(IEnumerable<Post> posts, string sortBy, string direction)
-        {
-            if (posts == null || !posts.Any())
-                return new List<Post>();
-
-            var sortExpression = GetExpression(sortBy);
-
-            return direction?.ToLower() switch
-            {
-                "desc" => posts.OrderByDescending(sortExpression.Compile()).ToList(),
-                "asc" => posts.OrderBy(sortExpression.Compile()).ToList(),
-                _ => throw new ArgumentException("Direction parameter is invalid"),
-            };
-        }
 
         /// <summary>
         /// helper methdo to generate expressions for sorting
@@ -80,6 +58,29 @@ namespace Server.Services
                 _ => throw new ArgumentException("sortBy parameter is invalid"),
             };
             return expression;
+        }
+
+        /// <summary>
+        /// helper method to sort posts based on sortby and direction
+        /// </summary>
+        /// <param name="posts"></param>
+        /// <param name="sortBy"></param>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        private static List<Post> SortPosts(IEnumerable<Post> posts, string sortBy, string direction)
+        {
+            if (posts == null || !posts.Any())
+                return new List<Post>();
+
+            var sortExpression = GetExpression(sortBy);
+
+            return direction?.ToLower() switch
+            {
+                "asc" => posts.OrderBy(sortExpression.Compile()).ToList(),
+                "desc" => posts.OrderByDescending(sortExpression.Compile()).ToList(),
+                _ => throw new ArgumentException("Direction parameter is invalid"),
+            };
         }
     }
 }
