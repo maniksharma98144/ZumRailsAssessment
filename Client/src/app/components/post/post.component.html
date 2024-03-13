@@ -1,0 +1,31 @@
+<div>
+    <h2>Get Posts:</h2>
+</div>
+
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="tags">Tags: </label>
+        <input type="text" id="tags" formControlName="tags" required />
+    </div>
+
+    <div>
+        <label for="sortBy">SortBy: </label>
+
+        <select id="sortBy" formControlName="sortBy">
+            <option *ngFor="let type of sortType" [ngValue]="type">
+                {{ type }}
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="direction">Direction: </label>
+        <select id="direction" formControlName="direction">
+            <option *ngFor="let dir of directions" [ngValue]="dir">
+                {{ dir }}
+            </option>
+        </select>
+    </div>
+
+    <button class="button" type="submit">Submit</button>
+
+</form>

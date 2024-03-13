@@ -1,0 +1,30 @@
+<div>
+  <h1>Zum Rails Assessment</h1>
+</div>
+
+<div>
+  <app-post (submitForm)="getPosts($event)"></app-post>
+</div>
+
+<div>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Author Name</th>
+      <th>Author ID</th>
+      <th>Likes</th>
+      <th>Popularity</th>
+      <th>Reads</th>
+      <th>Tags</th>
+    </tr>
+    <tr *ngFor="let post of postData">
+      <td>{{post.id}}</td>
+      <td>{{post.author}}</td>
+      <td>{{post.authorId}}</td>
+      <td>{{post.likes}}</td>
+      <td>{{post.popularity}}</td>
+      <td>{{post.reads}}</td>
+      <td>{{post.tags}}</td>
+    </tr>
+  </table>
+</div>
